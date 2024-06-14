@@ -1,0 +1,479 @@
+$schema: https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json
+name: Pint
+fileTypes:
+  - pnt
+scopeName: source.pint
+patterns:
+  -
+    comment: macro metavariables
+    name: meta.macro.metavariable.pint
+    match: (\$)([a-z][A-Za-z0-9_]*)(?!')\b
+    captures:
+      1:
+        name: keyword.operator.macro.dollar.pint
+      2:
+        name: variable.other.metavariable.name.pint
+    patterns:
+      - include: '#keywords'
+  -
+    comment: modules
+    match: (mod)\s+((?:r#(?!crate|[Ss]elf|super))?[a-z][A-Za-z0-9_]*)
+    captures:
+      1:
+        name: storage.type.pint
+      2:
+        name: entity.name.module.pint
+  -
+    comment: use statements
+    name: meta.use.pint
+    begin: \b(use)\s
+    beginCaptures:
+      1:
+        name: keyword.other.pint
+    end: ;
+    endCaptures:
+      0:
+        name: punctuation.semi.pint
+    patterns:
+      - include: '#block-comments'
+      - include: '#comments'
+      - include: '#keywords'
+      - include: '#namespaces'
+      - include: '#punctuation'
+      - include: '#types'
+      - include: '#lvariables'
+  - include: '#block-comments'
+  - include: '#comments'
+  - include: '#attributes'
+  - include: '#lvariables'
+  - include: '#constants'
+  - include: '#gtypes'
+  - include: '#functions'
+  - include: '#types'
+  - include: '#keywords'
+  - include: '#lifetimes'
+  - include: '#macros'
+  - include: '#namespaces'
+  - include: '#punctuation'
+  - include: '#strings'
+  - include: '#variables'
+repository:
+  comments:
+    patterns:
+      -
+        comment: documentation comments
+        name: comment.line.documentation.pint
+        match: (///).*$
+        captures:
+          1:
+            name: punctuation.definition.comment.pint
+      -
+        comment: line comments
+        name: comment.line.double-slash.pint
+        match: "(//).*$"
+        captures:
+          1:
+            name: punctuation.definition.comment.pint
+  block-comments:
+    patterns:
+      -
+        comment: empty block comments
+        name: comment.block.pint
+        match: /\*\*/
+      -
+        comment: block documentation comments
+        name: comment.block.documentation.pint
+        begin: /\*\*
+        end: \*/
+        patterns:
+          - include: '#block-comments'
+      -
+        comment: block comments
+        name: comment.block.pint
+        begin: /\*(?!\*)
+        end: \*/
+        patterns:
+          - include: '#block-comments'
+  constants:
+    patterns:
+      -
+        comment: ALL CAPS constants
+        name: constant.other.caps.pint
+        match: \b[A-Z]{2}[A-Z0-9_]*\b
+      -
+        comment: constant declarations
+        match: \b(const)\s+([A-Z][A-Za-z0-9_]*)\b
+        captures:
+          1:
+            name: storage.type.pint
+          2:
+            name: constant.other.caps.pint
+      -
+        comment: decimal integers and floats
+        name: constant.numeric.decimal.pint
+        match: \b\d[\d_]*(\.?)[\d_]*(?:(E|e)([+-]?)([\d_]+))?(int)?\b
+        captures:
+          1:
+            name: punctuation.separator.dot.decimal.pint
+          2:
+            name: keyword.operator.exponent.pint
+          3:
+            name: keyword.operator.exponent.sign.pint
+          4:
+            name: constant.numeric.decimal.exponent.mantissa.pint
+          5:
+            name: entity.name.type.numeric.pint
+      -
+        comment: hexadecimal integers
+        name: constant.numeric.hex.pint
+        match: \b0x[\da-fA-F_]+(int)?\b
+        captures:
+          1:
+            name: entity.name.type.numeric.pint
+      -
+        comment: octal integers
+        name: constant.numeric.oct.pint
+        match: \b0o[0-7_]+(int)?\b
+        captures:
+          1:
+            name: entity.name.type.numeric.pint
+      -
+        comment: binary integers
+        name: constant.numeric.bin.pint
+        match: \b0b[01_]+(int)?\b
+        captures:
+          1:
+            name: entity.name.type.numeric.pint
+      -
+        comment: booleans
+        name: constant.language.bool.pint
+        match: \b(true|false)\b
+  escapes:
+    comment: 'escapes: ASCII, byte, Unicode, quote, regex'
+    name: constant.character.escape.pint
+    match: (\\)(?:(?:(x[0-7][\da-fA-F])|(u(\{)[\da-fA-F]{4,6}(\}))|.))
+    captures:
+      1:
+        name: constant.character.escape.backslash.pint
+      2:
+        name: constant.character.escape.bit.pint
+      3:
+        name: constant.character.escape.unicode.pint
+      4:
+        name: constant.character.escape.unicode.punctuation.pint
+      5:
+        name: constant.character.escape.unicode.punctuation.pint
+  attributes:
+    comment: attributes
+    name: meta.attribute.pint
+    begin: '(#)(\!?)(\[)'
+    beginCaptures:
+      1:
+        name: punctuation.definition.attribute.pint
+      3:
+        name: punctuation.brackets.attribute.pint
+    end: '\]'
+    endCaptures:
+      0:
+        name: punctuation.brackets.attribute.pint
+    patterns:
+      - include: '#block-comments'
+      - include: '#comments'
+      - include: '#keywords'
+      - include: '#lifetimes'
+      - include: '#punctuation'
+      - include: '#strings'
+      - include: '#gtypes'
+      - include: '#types'
+  functions:
+    patterns:
+      -
+        comment: function/method calls, chaining
+        name: meta.function.call.pint
+        begin: \b(?!__)((?:r#(?!crate|[Ss]elf|super))?[A-Za-z0-9_]+)(\()
+        beginCaptures:
+          1:
+            name: entity.name.function.pint
+          2:
+            name: punctuation.brackets.round.pint
+        end: \)
+        endCaptures:
+          0:
+            name: punctuation.brackets.round.pint
+        patterns:
+          - include: '#block-comments'
+          - include: '#comments'
+          - include: "#attributes"
+          - include: '#keywords'
+          - include: '#lvariables'
+          - include: '#constants'
+          - include: '#gtypes'
+          - include: '#functions'
+          - include: '#lifetimes'
+          - include: '#macros'
+          - include: '#namespaces'
+          - include: '#punctuation'
+          - include: '#strings'
+          - include: '#types'
+          - include: '#variables'
+  keywords:
+    patterns:
+      -
+        comment: control flow keywords
+        name: keyword.control.pint
+        match: (\b(break|continue|do|else|for|if|loop|match|return|try|while|yield)\b)|\b([a-zA-Z_]+[0-9a-zA-Z_]*')|\b(\$[a-zA-Z_]+[0-9a-zA-Z_]*')
+      -
+        comment: storage keywords
+        name: keyword.other.pint storage.type.pint
+        match: \b(state|intent|var|macro|mod)\b|\b(storage\s+)(?=\{)
+      -
+        comment: const keyword
+        name: storage.modifier.pint
+        match: \b(const)\b
+      -
+        comment: type keyword
+        name: keyword.declaration.type.pint storage.type.pint
+        match: \b(type)\b
+      -
+        comment: enum keyword
+        name: keyword.declaration.enum.pint storage.type.pint
+        match: \b(enum)\b
+      -
+        comment: trait keyword
+        name: keyword.declaration.trait.pint storage.type.pint
+        match: \b(interface)\b
+      -
+        comment: struct keyword
+        name: keyword.declaration.struct.pint storage.type.pint
+        match: \b(struct)\b
+      -
+        comment: storage modifiers
+        name: storage.modifier.pint
+        match: \b(abstract|static)\b|\b(storage)(?=::)
+      -
+        comment: other keywords
+        name: keyword.other.pint
+        match: \b(constraint|as|impl|in|priv|pub|union|use|__this_set_address|__this_address|__mut_keys_len|__mut_keys_contains|__recover_secp256k1|__sha256|__this_set_address|__this_address|__this_pathway|__state_len|__verify_ed25519)\b
+      -
+        comment: logical operators
+        name: keyword.operator.logical.pint
+        match: (\^|\||\|\||&&|<<|>>|!)(?!=)
+      -
+        comment: logical AND, borrow references
+        name: keyword.operator.borrow.and.pint
+        match: '&(?![&=])'
+      -
+        comment: assignment operators
+        name: keyword.operator.assignment.pint
+        match: (\+=|-=|\*=|/=|%=|\^=|&=|\|=|<<=|>>=)
+      -
+        comment: single equal
+        name: keyword.operator.assignment.equal.pint
+        match: '(?<![<>])=(?!=|>)'
+      -
+        comment: comparison operators
+        name: keyword.operator.comparison.pint
+        match: (=(=)?(?!>)|!=|<=|(?<!=)>=)
+      -
+        comment: math operators
+        name: keyword.operator.math.pint
+        match: '(([+%]|(\*(?!\w)))(?!=))|(-(?!>))|(/(?!/))'
+      -
+        comment: less than, greater than (special case)
+        match: (?:\b|(?:(\))|(\])|(\})))[ \t]+([<>])[ \t]+(?:\b|(?:(\()|(\[)|(\{)))
+        captures:
+          1:
+            name: punctuation.brackets.round.pint
+          2:
+            name: punctuation.brackets.square.pint
+          3:
+            name: punctuation.brackets.curly.pint
+          4:
+            name: keyword.operator.comparison.pint
+          5:
+            name: punctuation.brackets.round.pint
+          6:
+            name: punctuation.brackets.square.pint
+          7:
+            name: punctuation.brackets.curly.pint
+      -
+        comment: namespace operator
+        name: keyword.operator.namespace.pint
+        match: '::'
+      -
+        comment: dereference asterisk
+        match: (\*)(?=\w+)
+        captures:
+          1:
+            name: keyword.operator.dereference.pint
+      -
+        comment: dot access
+        name: keyword.operator.access.dot.pint
+        match: \.(?!\.)
+      -
+        comment: ranges, range patterns
+        name: keyword.operator.range.pint
+        match: \.{2}(=|\.)?
+      -
+        comment: colon
+        name: keyword.operator.key-value.pint
+        match: ':(?!:)'
+      -
+        comment: dashrocket, skinny arrow
+        name: keyword.operator.arrow.skinny.pint
+        match: ->
+      -
+        comment: hashrocket, fat arrow
+        name: keyword.operator.arrow.fat.pint
+        match: =>
+      -
+        comment: dollar macros
+        name: keyword.operator.macro.dollar.pint
+        match: \$
+      -
+        comment: question mark operator, questionably sized, macro kleene matcher
+        name: keyword.operator.question.pint
+        match: \?
+  interpolations:
+    comment: curly brace interpolations
+    name: meta.interpolation.pint
+    match: '({)[^"{}]*(})'
+    captures:
+      1:
+        name: punctuation.definition.interpolation.pint
+      2:
+        name: punctuation.definition.interpolation.pint
+  macros:
+    patterns:
+      -
+        comment: macros
+        name: meta.macro.pint
+        match: ((\@[a-z_][A-Za-z0-9_]*)|(\@[A-Z_][A-Za-z0-9_]*))
+        captures:
+          2:
+            name: entity.name.function.macro.pint
+          3:
+            name: entity.name.type.macro.pint
+  namespaces:
+    patterns:
+      -
+        comment: namespace (non-type, non-function path segment)
+        match: (?<![A-Za-z0-9_])([A-Za-z0-9_]+)((?<!super|self)::)
+        captures:
+          1:
+            name: entity.name.namespace.pint
+          2:
+            name: keyword.operator.namespace.pint
+  types:
+    patterns:
+      -
+        comment: numeric types
+        match: '(?<![A-Za-z])(int|b256)\b'
+        captures:
+          1:
+            name: entity.name.type.numeric.pint
+      -
+        comment: primitive types
+        name: entity.name.type.primitive.pint
+        match: \b(bool)\b
+      -
+        comment: struct declarations
+        match: \b(struct)\s+(_?[A-Z][A-Za-z0-9_]*)\b
+        captures:
+          1:
+            name: keyword.declaration.struct.pint storage.type.pint
+          2:
+            name: entity.name.type.struct.pint
+      -
+        comment: enum declarations
+        match: \b(enum)\s+(_?[A-Z][A-Za-z0-9_]*)\b
+        captures:
+          1:
+            name: keyword.declaration.enum.pint storage.type.pint
+          2:
+            name: entity.name.type.enum.pint
+      -
+        comment: type declarations
+        match: \b(type)\s+(_?[A-Z][A-Za-z0-9_]*)\b
+        captures:
+          1:
+            name: keyword.declaration.type.pint storage.type.pint
+          2:
+            name: entity.name.type.declaration.pint
+      -
+        comment: types
+        name: entity.name.type.pint
+        match: '\b_?[A-Z][A-Za-z0-9_]*\b(?!!)'
+  gtypes:
+    patterns:
+      -
+        comment: option types
+        name: entity.name.type.option.pint
+        match: \b(nil)\b
+  punctuation:
+    patterns:
+      -
+        comment: comma
+        name: punctuation.comma.pint
+        match: ','
+      -
+        comment: curly braces
+        name: punctuation.brackets.curly.pint
+        match: '[{}]'
+      -
+        comment: parentheses, round brackets
+        name: punctuation.brackets.round.pint
+        match: '[()]'
+      -
+        comment: semicolon
+        name: punctuation.semi.pint
+        match: ;
+      -
+        comment: square brackets
+        name: punctuation.brackets.square.pint
+        match: '[\[\]]'
+      -
+        comment: angle brackets
+        name: punctuation.brackets.angle.pint
+        match: '(?<!=)[<>]'
+  strings:
+    patterns:
+      -
+        comment: double-quoted strings and byte strings
+        name: string.quoted.double.pint
+        begin: '(b?)(")'
+        beginCaptures:
+          1:
+            name: string.quoted.byte.raw.pint
+          2:
+            name: punctuation.definition.string.pint
+        end: '"'
+        endCaptures:
+          0:
+            name: punctuation.definition.string.pint
+        patterns:
+          - include: '#escapes'
+          - include: '#interpolations'
+      -
+        comment: double-quoted raw strings and raw byte strings
+        name: string.quoted.double.pint
+        begin: '(b?r)(#*)(")'
+        beginCaptures:
+          1:
+            name: string.quoted.byte.raw.pint
+          2:
+            name: punctuation.definition.string.raw.pint
+          3:
+            name: punctuation.definition.string.pint
+        end: '(")(\2)'
+        endCaptures:
+          1:
+            name: punctuation.definition.string.pint
+          2:
+            name: punctuation.definition.string.raw.pint
+  variables:
+    patterns:
+      -
+        comment: variables
+        name: variable.other.pint
+        match: \b(?:r#(?!(crate|[Ss]elf|super)))?[a-z0-9_]+(?!')\b

@@ -1,0 +1,40 @@
+{
+  "name": "pint-lang",
+  "displayName": "Pint Syntax",
+  "description": "Syntax highlighting for pint lang",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "pint",
+        "aliases": [
+          "Pint",
+          "pint"
+        ],
+        "extensions": [
+          "pnt"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "pint",
+        "scopeName": "source.pint",
+        "path": "./syntaxes/pint.tmLanguage.json"
+      }
+    ]
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^2.27.0"
+  }
+}
