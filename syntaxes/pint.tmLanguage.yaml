@@ -225,7 +225,7 @@ repository:
       -
         comment: storage keywords
         name: keyword.other.pint storage.type.pint
-        match: \b(state|intent|var|macro|mod)\b|\b(storage\s+)(?=\{)
+        match: \b(state|predicate|contract|var|macro|mod)\b|\b(storage\s+)(?=\{)
       -
         comment: const keyword
         name: storage.modifier.pint
