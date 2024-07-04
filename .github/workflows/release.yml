@@ -1,0 +1,32 @@
+name: release 
+
+on:
+    push:
+      tags:
+        - "v*.*.*"
+
+jobs:
+  build:
+    permissions:
+      id-token: "write" # added for magic-nix-cache-action
+      contents: "read"  # added for magic-nix-cache-action
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - name: Publish to Open VSX Registry
+        id: package-vsix
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+            pat: "STUB"
+            dryRun: true
+      - name: Release 
+        uses: softprops/action-gh-release@v2
+        with:
+            files: ${{ steps.package-vsix.outputs.vsixPath }}

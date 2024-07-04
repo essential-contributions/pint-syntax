@@ -7,7 +7,7 @@ patterns:
   -
     comment: macro metavariables
     name: meta.macro.metavariable.pint
-    match: (\$)([a-z][A-Za-z0-9_]*)(?!')\b
+    match: (\$)([a-z][A-Za-z0-9_]*)(?!(?:\.\d+)?')\b
     captures:
       1:
         name: keyword.operator.macro.dollar.pint
@@ -111,7 +111,7 @@ repository:
       -
         comment: decimal integers and floats
         name: constant.numeric.decimal.pint
-        match: \b\d[\d_]*(\.?)[\d_]*(?:(E|e)([+-]?)([\d_]+))?(int)?\b
+        match: (?<!(?:\w|')\.)\b\d[\d_]*(\.?)[\d_]*(?:(E|e)([+-]?)([\d_]+))?(int)?\b
         captures:
           1:
             name: punctuation.separator.dot.decimal.pint
@@ -221,7 +221,7 @@ repository:
       -
         comment: control flow keywords
         name: keyword.control.pint
-        match: (\b(break|continue|do|else|for|if|loop|match|return|try|while|yield)\b)|\b([a-zA-Z_]+[0-9a-zA-Z_]*')|\b(\$[a-zA-Z_]+[0-9a-zA-Z_]*')
+        match: (\b(break|continue|do|else|for|if|loop|match|return|try|while|yield)\b)|\b(\$?[a-zA-Z_]+[0-9a-zA-Z_]*(?:\.[0-9]+)?')
       -
         comment: storage keywords
         name: keyword.other.pint storage.type.pint
