@@ -2,12 +2,26 @@
   "name": "pint-lang",
   "displayName": "Pint Syntax",
   "description": "Syntax highlighting for pint lang",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/essential-contributions/pint-syntax"
+  },
+  "license": "Apache-2.0",
+  "icon": "logo.png",
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
     "Programming Languages"
+  ],
+  "keywords": [
+        "pint",
+        "language",
+        "syntax",
+        "grammar",
+        "highlighting",
+        "constraints"
   ],
   "contributes": {
     "languages": [
@@ -32,9 +46,8 @@
     ]
   },
   "devDependencies": {
-    "js-yaml": "^4.1.0"
-  },
-  "dependencies": {
+    "esbuild": "^0.23.0",
+    "js-yaml": "^4.1.0",
     "@vscode/vsce": "^2.27.0"
   }
 }
