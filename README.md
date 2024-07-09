@@ -1,8 +1,8 @@
 # pint-lang README
 Syntax highlighting for the Pint programming language.
 ## Screenshots
-![image](https://github.com/essential-contributions/pint-syntax/assets/7286454/bd289c24-f4fa-4798-a61c-1cbf1b9ace3b)
-![image](https://github.com/essential-contributions/pint-syntax/assets/7286454/1e6bedc3-d858-4bdf-8ee3-618531f097e1)
+![image](https://github.com/essential-contributions/pint-syntax/assets/7286454/1ca95afe-6aa7-487e-9e46-f8342268447a)
+
 ## Update
 Edit the `pint.tmLanguage.yaml` file and run:
 ```bash
