@@ -2,7 +2,7 @@
   "name": "pint-lang",
   "displayName": "Pint Syntax",
   "description": "Syntax highlighting for pint lang",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "essential-contributions",
   "repository": {
     "type": "git",
